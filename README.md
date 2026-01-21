@@ -1,0 +1,2 @@
+# AJHA_OUTCOME_CREATE_REPORT
+このリポジトリはXYZプロジェクトのためのリポジトリです。
