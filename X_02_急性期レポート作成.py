@@ -441,11 +441,18 @@ def torans_HospNameToHospNumber(target_year, target_group, target_period, target
                 #print("row_data:"+str(row_data))
             
                 for i in range(startCol, len(row_data) + 1, 1):
-                    pNo = dict_public_no[ws.cell(row=hospRow, column=i).value] 
-                    if pNo is None:
-                        print("エラー: 病院名がdict_public_noに存在しません")
-                        print("病院名：{}".format(ws.cell(row=hospRow, column=i).value))
-                        print("病院番号：{}".format(pNo))
+                    cell_value = ws.cell(row=hospRow, column=i).value
+                    if cell_value is None:
+                        print(f"空白セルをスキップ: 行={hospRow}, 列={i}")
+                        continue
+
+                    if cell_value in dict_public_no:
+                        pNo = dict_public_no[cell_value]
+                    else:
+                        print(f"エラー: 病院名が辞書に存在しません。病院名: {cell_value}")
+                        print("row数：{}".format(hospRow))
+                        print("col数：{}".format(i))
+                        print("ファイル名：{}".format(file))
                         return -1
 
                     ws.cell(row=hospRow, column=i, value=str(pNo)) 
@@ -469,10 +476,11 @@ def torans_HospNameToHospNumber(target_year, target_group, target_period, target
             cnt += 1
         
         return 0
-    except:
+    except Exception as e:
         print("\nエラー: 病院名を病院番号に変換に失敗しました。年度={}、グループ={}、期間={}、レポート種類={}、フォルダパス={}".format(target_year,target_group,target_period,target_report_type,output_folder))
         
         print("エラー内容：{}".format(sys.exc_info()[1]))
+        print(f"エラー内容: {e}")
         print("ファイル名：{}".format(file))
         
         print("行数：{}".format(hospRow))
